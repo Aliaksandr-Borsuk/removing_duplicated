@@ -1,0 +1,38 @@
+# Виртуальные окружения
+.venv/
+venv/
+env/
+
+# Кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.swp
+
+# Тестовые отчёты
+.coverage
+htmlcov/
+.pytest_cache/
+
+# VS Code настройки
+.vscode/
+
+# Системные файлы Windows
+Thumbs.db
+Desktop.ini
+
+# Артефакты сборки
+build/
+dist/
+*.egg-info/
+
+# Jupyter ноутбуки контрольные файлы
+.ipynb_checkpoints/
+
+# Poetry lock файл (по желанию можно оставить)
+# poetry.lock

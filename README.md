@@ -63,6 +63,14 @@ project_root/
 
 ---
 
+## Скриншоты 
+### Главное окно ![Главное окно](images/main_window.png) 
+### Вкладка Scanner‑1 ![Scanner‑1](images/scanner1.png) 
+### Вкладка Scanner‑2 ![Scanner‑2](images/scanner2.png)
+
+---
+
+
 ##  Зависимости
     - tkinter (обычно входит в стандартную библиотеку Python).
     - Дополнительно: hashlib, json, shutil, pathlib — стандартные модули Python.

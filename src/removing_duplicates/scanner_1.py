@@ -10,7 +10,7 @@ import threading
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
-from utils import file_hash
+from src.removing_duplicates.utils import file_hash
 
 CACHE_FILE = "scanner1_cache.json"
 

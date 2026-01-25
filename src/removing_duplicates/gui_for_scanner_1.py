@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 import threading
-from scanner_1 import Scanner1
-from utils import find_internal_duplicates
+from src.removing_duplicates.scanner_1 import Scanner1
+from src.removing_duplicates.utils import find_internal_duplicates
 
 
 class Scanner1GUI:
@@ -17,8 +17,8 @@ class Scanner1GUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Scanner‑1 (Эталонная папка)")
-        self.root.minsize(600, 300)
+        # self.root.title("Scanner‑1 (Эталонная папка)")
+        # self.root.minsize(600, 300)
 
         container = ttk.Frame(root, padding=12)
         container.pack(fill="both", expand=True)

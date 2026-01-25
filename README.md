@@ -35,15 +35,19 @@ Duplicate Scanner Suite — это инструмент для поиска и �
 project_root/
 ├─ main_gui.py                # общий GUI, точка входа
 ├─ README.md                   # описание проекта
+├─ images/
+│   ├─ scanner1.png
+│   ├─ scanner2.png
+│   └─ main_window.png
 └─ src/
     ├─ init.py
     |─ removing_duplicates/
-    ├─ init.py
-    ├─ scanner1.py
-    ├─ gui_for_scanner_1.py
-    ├─ scanner2.py
-    ├─ gui_for_scanner_2.py
-    └─ utils.py
+            ├─ init.py
+            ├─ scanner1.py
+            ├─ gui_for_scanner_1.py
+            ├─ scanner2.py
+            ├─ gui_for_scanner_2.py
+            └─ utils.py
 ```
 
 ---
@@ -65,8 +69,8 @@ project_root/
 
 ## Скриншоты 
 ### Главное окно ![Главное окно](images/main_window.png) 
-### Вкладка Scanner‑1 ![Scanner‑1](images/scanner1.png) 
-### Вкладка Scanner‑2 ![Scanner‑2](images/scanner2.png)
+### Вкладка Scanner‑1 ![Scanner‑1](images/scanner_1.png) 
+### Вкладка Scanner‑2 ![Scanner‑2](images/scanner_2.png)
 
 ---
 

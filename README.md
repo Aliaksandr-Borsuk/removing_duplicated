@@ -66,6 +66,16 @@ project_root/
 python main_gui.py
 ```
 
+## Сборка .exe (Windows)
+
+Для создания портативного исполняемого файла:
+
+```powershell
+poetry run pyinstaller --onefile --windowed --name "DuplicateScanner" --add-data "src;src" main_gui.py
+```
+
+Результат: dist/DuplicateScanner.exe
+
 ### Рекомендуемый рабочий процесс
 
 1. Запустите **Scanner‑1** для эталонной папки (например, основная коллекция фото)

@@ -57,16 +57,18 @@ project_root/
 ```
 
 ##  Запуск
+
 1. Установите Python 3.13+ (должна работать на 3.8+).
 2. Клонируйте репозиторий.
 3. Запустите приложение:
 
- 
+### Через терминал
+
 ```bash
 python main_gui.py
 ```
 
-## Сборка .exe (Windows)
+### Или соберите .exe (Windows)
 
 Для создания портативного исполняемого файла:
 
@@ -75,6 +77,11 @@ poetry run pyinstaller --onefile --windowed --name "DuplicateScanner" --add-data
 ```
 
 Результат: dist/DuplicateScanner.exe
+
+### Или скачайте готовый исполняемый файл для **Windows**   
+- доступен в [релизах](https://github.com/Aliaksandr-Borsuk/removing_duplicated/releases).
+
+---
 
 ### Рекомендуемый рабочий процесс
 

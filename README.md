@@ -76,7 +76,10 @@ python main_gui.py
 poetry run pyinstaller --onefile --windowed --name "DuplicateScanner" --add-data "src;src" main_gui.py
 ```
 
-Результат: dist/DuplicateScanner.exe
+Результат: dist/DuplicateScanner.exe   
+
+Антивирусы могут блокировать самописный .exe как угрозу (ложное срабатывание).     
+Для домашнего использования рекомендуется запускать из исходников (`python main_gui.py`).  
 
 ### Или скачайте готовый исполняемый файл для **Windows**   
 - доступен в [релизах](https://github.com/Aliaksandr-Borsuk/removing_duplicated/releases).

@@ -1,3 +1,4 @@
+# gui_for_scanner_1.py
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
@@ -12,13 +13,12 @@ class Scanner1GUI:
     - поле выбора директории;
     - кнопка запуска сканирования;
     - прогресс‑бар;
-    - кнопка «Прервать».
+    - кнопка «Прервать»;
+    - вывод и сохранение дубликатов и непрочитанных файлов.
     """
 
     def __init__(self, root):
         self.root = root
-        # self.root.title("Scanner‑1 (Эталонная папка)")
-        # self.root.minsize(600, 300)
 
         container = ttk.Frame(root, padding=12)
         container.pack(fill="both", expand=True)
@@ -42,12 +42,16 @@ class Scanner1GUI:
         self.start_btn.pack(side="left")
         self.stop_btn = ttk.Button(actions_row, text="Прервать", command=self.stop_scan)
         self.stop_btn.pack(side="left", padx=8)
-        # кнопка для показа дубликатов изначально выключена
         self.show_dupes_btn = ttk.Button(
             actions_row, text="Показать дубликаты", command=self.show_duplicates
         )
         self.show_dupes_btn.pack(side="left", padx=8)
-        self.show_dupes_btn.configure(state="disabled")  # изначально выключена
+        self.show_dupes_btn.configure(state="disabled")
+        self.show_unread_btn = ttk.Button(
+            actions_row, text="Показать непрочитанные", command=self.show_unreadable
+        )
+        self.show_unread_btn.pack(side="left", padx=8)
+        self.show_unread_btn.configure(state="disabled")
 
         # Прогресс‑бар
         self.progress = ttk.Progressbar(
@@ -61,23 +65,16 @@ class Scanner1GUI:
 
         # Служебные переменные
         self.scanner = Scanner1()
-        # self.scanner.load_cache()
         self.stop_flag = threading.Event()
         self.worker_thread = None
 
     def show_duplicates(self):
-        """
-        Показывает найденные дубликаты внутри эталонной директории.
-        Использует hash_map из Scanner1.
-        """
+        """Выводит и сохраняет список дубликатов."""
         duplicates = find_internal_duplicates(self.scanner.hash_map)
 
         if not duplicates:
-            messagebox.showinfo(
-                "Дубликаты", "Внутри эталонной директории дубликатов не найдено."
-            )
+            messagebox.showinfo("Дубликаты", "Дубликатов не найдено.")
         else:
-            # Формируем текст для вывода
             text = ""
             for h, paths in duplicates.items():
                 text += f"Хеш: {h}\n"
@@ -85,10 +82,36 @@ class Scanner1GUI:
                     text += f"  {p}\n"
                 text += "\n"
 
-            # Показываем в отдельном окне
+            # сохраняем в эталонной директории
+            report_path = Path(self.dir_var.get()) / "duplicates_report.txt"
+            with open(report_path, "w", encoding="utf-8") as f:
+                f.write(text)
+
             dup_win = tk.Toplevel(self.root)
             dup_win.title("Найденные дубликаты")
             txt = tk.Text(dup_win, wrap="none")
+            txt.insert("1.0", text)
+            txt.pack(fill="both", expand=True)
+
+    def show_unreadable(self):
+        """Выводит и сохраняет список непрочитанных файлов."""
+        unreadable = self.scanner.unreadable_files
+
+        if not unreadable:
+            messagebox.showinfo("Непрочитанные", "Все файлы доступны для чтения.")
+        else:
+            text = "Непрочитанные файлы:\n\n"
+            for p in unreadable:
+                text += f"{p}\n"
+
+            # сохраняем в эталонной директории
+            report_path = Path(self.dir_var.get()) / "unreadable_files.txt"
+            with open(report_path, "w", encoding="utf-8") as f:
+                f.write(text)
+
+            unread_win = tk.Toplevel(self.root)
+            unread_win.title("Непрочитанные файлы")
+            txt = tk.Text(unread_win, wrap="none")
             txt.insert("1.0", text)
             txt.pack(fill="both", expand=True)
 
@@ -131,6 +154,7 @@ class Scanner1GUI:
 
         # включаем кнопки после сканирования
         self.root.after(0, lambda: self.show_dupes_btn.configure(state="normal"))
+        self.root.after(0, lambda: self.show_unread_btn.configure(state="normal"))
         self.root.after(0, lambda: self.start_btn.configure(state="normal"))
 
 

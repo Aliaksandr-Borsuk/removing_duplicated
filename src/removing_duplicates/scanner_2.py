@@ -106,23 +106,15 @@ class Scanner2:
     ) -> None:
         """
         Сканирует очищаемую директорию:
-        - сначала фильтрует по размеру (экономия: хеш считаем только при совпадении размера);
-        - если хеш найден в hash_map — это дубликат;
-            - либо удаляем (если delete_duplicates и не collect_only),
-            - либо добавляем в список duplicates;
-        - если хеш не найден — это уникальный файл;
-            - либо переносим (если move_uniques и не collect_only),
-            - либо добавляем в список unique_files.
-
-        :param stop_flag: threading.Event или совместимый объект с методом is_set()
-        :param progress_callback: функция (processed, total) для обновления прогресса
+        - фильтрует по размеру;
+        - если хеш совпадает с эталонным — дубликат;
+        - иначе уникальный;
+        - при ошибке чтения файл заносится в unique_files.
         """
-        # Подготовка списка файлов
         all_paths = [p for p in self.target_dir.rglob("*") if p.is_file()]
         total = len(all_paths)
         processed = 0
 
-        # Создаём папку для уникальных файлов один раз, если понадобится
         if self.move_uniques and not self.collect_only:
             self._uniques_dest_dir = self.reference_dir / self.uniques_subdir_name
             self._uniques_dest_dir.mkdir(exist_ok=True)
@@ -131,28 +123,30 @@ class Scanner2:
             if stop_flag is not None and getattr(stop_flag, "is_set", lambda: False)():
                 break
 
-            size = f.stat().st_size
+            try:
+                size = f.stat().st_size
+                hashes_for_size = self.size_map.get(size)
 
-            # Экономия: считаем хеш только если размер есть в эталонном кэше
-            hashes_for_size = self.size_map.get(size)
-            if hashes_for_size:
-                # Размер совпал — считаем хеш и проверяем наличие в hash_map
-                h = file_hash(f)
-                if h in self.hash_map:
-                    # Дубликат
-                    self.duplicates.append(str(f))
-                    if self.delete_duplicates and not self.collect_only:
-                        try:
-                            f.unlink()
-                        except Exception as e:
-                            # В реальном приложении — логировать
-                            pass
+                if hashes_for_size:
+                    h = file_hash(f)  # может выбросить ошибку
+                    if h in self.hash_map:
+                        # дубликат
+                        self.duplicates.append(str(f))
+                        if self.delete_duplicates and not self.collect_only:
+                            try:
+                                f.unlink()
+                            except Exception:
+                                pass
+                    else:
+                        # уникальный
+                        self._handle_unique(f)
                 else:
-                    # Уникальный (по содержимому)
+                    # уникальный по размеру
                     self._handle_unique(f)
-            else:
-                # Размер не встречается в эталонной папке — точно уникальный
-                self._handle_unique(f)
+
+            except (PermissionError, FileNotFoundError, OSError):
+                # при ошибке чтения считаем файл уникальным (без дубликатов)
+                self.unique_files.append(str(f))
 
             processed += 1
             if progress_callback:

@@ -12,8 +12,7 @@ def file_hash(path: Path, chunk_size=8192) -> str:
     return h.hexdigest()
 
 
-# utils.py
-def find_internal_duplicates(hash_map: dict) -> dict:
+def find_internal_duplicates(hash_map: dict[str, set[Path]]) -> dict[str, list[Path]]:
     """
     Находит дубликаты внутри эталонной директории.
     Принимает словарь {хеш: set(пути файлов)}.
@@ -27,10 +26,10 @@ def find_internal_duplicates(hash_map: dict) -> dict:
     return duplicates
 
 
-def scan_directory(dir_path: Path):
-    """Рекурсивно обходит директорию и возвращает список (path, size)."""
-    files = []
-    for f in dir_path.rglob("*"):
-        if f.is_file():
-            files.append((f, f.stat().st_size))
-    return files
+# def scan_directory(dir_path: Path):
+#     """Рекурсивно обходит директорию и возвращает список (path, size)."""
+#     files = []
+#     for f in dir_path.rglob("*"):
+#         if f.is_file():
+#             files.append((f, f.stat().st_size))
+#     return files

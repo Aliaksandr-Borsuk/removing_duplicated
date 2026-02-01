@@ -1,11 +1,11 @@
 [project]
 name = "removing-duplicates"
 version = "0.1.0"
-description = ""
+description = "Pet Duplicate Scanner Suite with Tkinter GUI"
 authors = [
     {name = "Aliaksandr",email = "yabarsukby@gmail.com"}
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.8" 
 dependencies = [
 ]
 
